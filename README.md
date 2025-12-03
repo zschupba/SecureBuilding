@@ -1,5 +1,9 @@
+This program only runs on linux
+
 Build Instructinos:
+
 make local
+
 ./local
 
 This program is entirely controlled by the CLI so my security approach was validating userInput very thouruoghly to only what i want and then structuring the commands to be from a list of options
