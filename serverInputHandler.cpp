@@ -51,7 +51,7 @@ const std::unordered_map<std::string, std::string> creds = {
                 runLogPager();
                 std::cout << "Conclusion of log file\n";
             } else {
-                std::cout << "You cant do that function buddy\n";
+                std::cout << "You dont have permissions for that buddy\n";
                 validInput = false;
             }
         }
@@ -140,7 +140,7 @@ std::string getLineButSecure(bool& validInput){
         return "";
     }
     
-    for (int i = 0; i < int(input.size()); i++) {
+    for (int i = 0; i < int(input.size()); i++) {  
         if (!((input[i] >= 'A' && input[i] <= 'Z') ||
               (input[i] >= 'a' && input[i] <= 'z') ||
               (input[i] >= '0' && input[i] <= '9') ||
