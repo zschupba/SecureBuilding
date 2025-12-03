@@ -1,5 +1,5 @@
 #passwords
-*.env
+.env
 
 # Prerequisites
 *.d
