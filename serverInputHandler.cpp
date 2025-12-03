@@ -125,7 +125,7 @@ int main() {
 
 // ###################### Stores in gitignore  ################################
 // Gets user login info
-std::unordered_map<std::string, std::string> load_env(const std::string& filename = "passwords.env") {  
+std::unordered_map<std::string, std::string> load_env(const std::string& filename = ".env") {  
     std::unordered_map<std::string, std::string> env_vars;
     std::ifstream file(filename);
     std::string line;
@@ -213,7 +213,7 @@ int getUserCredentials(){
     return 0;
 }
 int authenticateCredentials(std::string user, std::string password){
-    const std::unordered_map<std::string, std::string> creds = load_env("passwords.env");
+    const std::unordered_map<std::string, std::string> creds = load_env(".env");
     auto it = creds.find(user);
     if (it == creds.end()) {
         return 0;
