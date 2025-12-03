@@ -32,6 +32,8 @@ const std::unordered_map<std::string, std::string> creds = {
     bool validInput = false;
     bool validFileName = false;
     bool validCommand = false;
+    int renditions = 10;
+    int sleepTime = 1;
     std::string fileName = "logFile.txt";
     std::string input;
 
@@ -40,16 +42,17 @@ const std::unordered_map<std::string, std::string> creds = {
     if (validLogin==0) {
         std::cout << "How you get here? you really have no access\n";
     }else if(validLogin==4){
-        std::cout << "You logged into read some logs!!";
+        std::cout << "You logged into read some logs!!\n";
         validInput= false;
         while(!validInput){
-            std::cout << "Enter 'readLog' in order to read the logs";
+            std::cout << "Enter 'readLog' in order to read the logs: ";
             input = getLineButSecure(validInput);
             if (input == "readLog") {
                 runLogPager();
                 std::cout << "Conclusion of log file\n";
             } else {
                 std::cout << "You cant do that function buddy\n";
+                validInput = false;
             }
         }
     }
@@ -80,9 +83,42 @@ const std::unordered_map<std::string, std::string> creds = {
                 runLogPager();
                 std::cout << "Conclusion of log file\n";
             } else if (input == "appendLog"){
-                
-
-                makeLog(1,10);
+                validCommand = false;
+                while(!validCommand){
+                    std::cout << "Do you want change the log output settings? (Y) or (N): ";
+                    input = getLineButSecure(validCommand);
+                    validInput = false;
+                    if(input == "y" || input == "Y"){
+                        while(!validInput){
+                            std::cout<< "How long should it wait between log entries: " ;
+                            input = getLineButSecure(validInput);
+                            try{
+                                sleepTime = std::stoi(input);
+                            }catch (const std::invalid_argument& e) {
+                                std::cerr << "thats not a number" << e.what() << std::endl;
+                                validInput=false;
+                            } catch (const std::out_of_range& e) {
+                                std::cerr << "that too big " << e.what() << std::endl;
+                                validInput=false;
+                            }
+                        }
+                        validInput = false;
+                        while(!validInput){
+                            std::cout<< "How many entries should it record: " ;
+                            input = getLineButSecure(validInput);
+                            try{
+                                renditions = std::stoi(input);
+                            }catch (const std::invalid_argument& e) {
+                                std::cerr << "thats not a number" << e.what() << std::endl;
+                                validInput=false;
+                            } catch (const std::out_of_range& e) {
+                                std::cerr << "that too big " << e.what() << std::endl;
+                                validInput=false;
+                            }
+                        }
+                    }
+                }
+                makeLog(sleepTime,renditions);
                 std::cout << "log has finished making, everyone left\n";
 
             } else {
@@ -110,7 +146,7 @@ std::string getLineButSecure(bool& validInput){
               (input[i] >= '0' && input[i] <= '9') ||
               input[i] == '!' || input[i] == '@' || input[i] == '#' ||
               input[i] == '$' || input[i] == '&' || input[i] == '*' || 
-              input[i] == ' ' || input[i] == '.' || input[i] == '/'))
+              input[i] == ' ' || input[i] == '.'))
         {
             validInput = false;
             std::cout << "Invalid input only alphanumeric characters and '.!@#$&* ', try again\n";
