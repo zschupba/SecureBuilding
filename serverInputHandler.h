@@ -9,6 +9,7 @@ extern const int MAX_ATTEMPTS;
 extern const int NUM_USERS;
 
 std::string getLineButSecure(bool& validInput);
+//std::unordered_map<std::string, std::string> load_env(const std::string& filename = "./passwords.env");
 
 int getUserCredentials();  // Gets a username and password, validates them and then checks agains passwords 
 int authenticateCredentials(std::string user, std::string password);    // helper function for getUserCredentials

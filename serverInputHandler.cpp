@@ -12,6 +12,7 @@
 #include <unordered_map>
 #include <unistd.h>
 #include <termios.h>
+#include <fstream>
 
 // This should be handled with encryption and gitignore
 const std::string usernames[] = {"admin", "user1", "user2"};
@@ -19,15 +20,8 @@ const std::string passwords[] = {"admin123", "user1pass", "user2pass"};
 const int NUM_USERS = 3;
 const int MAX_ATTEMPTS = 5;
 
-// !!!!!!!!!!!! Needs to be stored in git ignore !!!!!!!!!!!!!!!!!!!!!!
-const std::unordered_map<std::string, std::string> creds = {
-    {"admin", "a"},
-    {"user1", "user1pass"},
-    {"user2", "user2pass"}
-};
 
-
- int main() {
+int main() {
 //int serverInputHandler(){
     bool validInput = false;
     bool validFileName = false;
@@ -129,6 +123,28 @@ const std::unordered_map<std::string, std::string> creds = {
     return 0;
 }
 
+// ###################### Stores in gitignore  ################################
+// Gets user login info
+std::unordered_map<std::string, std::string> load_env(const std::string& filename = "passwords.env") {  
+    std::unordered_map<std::string, std::string> env_vars;
+    std::ifstream file(filename);
+    std::string line;
+
+    if (file.is_open()) {
+        while (getline(file, line)) {
+            size_t equals_pos = line.find('=');
+            if (equals_pos != std::string::npos) {
+                std::string key = line.substr(0, equals_pos);
+                std::string value = line.substr(equals_pos + 1);
+                env_vars[key] = value;
+            }
+        }
+        file.close();
+    } else {
+        std::cerr << "Error: Unable to open .env file: " << filename << std::endl;
+    }
+    return env_vars;
+}
 
 // ################### Input Validatino and buffer overflow ###########################
 std::string getLineButSecure(bool& validInput){
@@ -197,6 +213,7 @@ int getUserCredentials(){
     return 0;
 }
 int authenticateCredentials(std::string user, std::string password){
+    const std::unordered_map<std::string, std::string> creds = load_env("passwords.env");
     auto it = creds.find(user);
     if (it == creds.end()) {
         return 0;
